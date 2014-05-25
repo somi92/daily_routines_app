@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">DailyRoutinesApp</string>
+    <string name="hello_world">Hello world!</string>
+    
+    <string-array name="routines_array">
+        <item>Pranje zuba</item>
+        <item>Vezanje pertli</item>
+        <item>Oblacenje majice</item>
+    </string-array>
+
+</resources>
