@@ -76,7 +76,7 @@ public class RoutineActivity extends Activity {
 					R.drawable.eagle2,
 					R.drawable.eagle3
 				};
-				maxStep = 3;
+				maxStep = 2;
 				this.routineSteps = routineSteps;
 			}
 			break;
@@ -87,7 +87,7 @@ public class RoutineActivity extends Activity {
 					R.drawable.tiger2,
 					R.drawable.tiger3
 				};
-				maxStep = 3;
+				maxStep = 2;
 				this.routineSteps = routineSteps;
 			}
 			break;
