@@ -4,11 +4,11 @@
     <string name="app_name">DailyRoutinesApp</string>
     <string name="hello_world">Hello world!</string>
     <string name="finish_button">Kraj</string>
+    <string name="routine_img_desc"></string>
     
     <string-array name="routines_array">
         <item>PRANJE ZUBA</item>
         <item>VEZANJE PERTLI</item>
-        <item>OBLACENJE MAJICE</item>
     </string-array>
 
 </resources>

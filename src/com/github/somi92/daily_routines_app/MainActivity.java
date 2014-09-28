@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
 	public static final int NONE = 0;
 	public static final int TEETH_BRUSHING = 1;
 	public static final int SHOE_TYING = 2;
-	public static final int PUTTING_ON_TSHIRT = 3;
+//	public static final int PUTTING_ON_TSHIRT = 3;
 	private int routine;
 
 	@Override
@@ -57,11 +57,6 @@ public class MainActivity extends Activity {
 					
 					case 1: {
 						routine = MainActivity.SHOE_TYING;
-					}
-					break;
-					
-					case 2: {
-						routine = MainActivity.PUTTING_ON_TSHIRT;
 					}
 					break;
 					

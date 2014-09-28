@@ -1,27 +1,25 @@
 package com.github.somi92.daily_routines_app;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class RoutineActivity extends Activity {
 
 	private ImageView routineStepView;
-//	private TextView txtRoutine;
 	private Button btnPrevious;
 	private Button btnNext;
 	private Button btnSound;
 	private Button btnFinish;
 	
-	private int[] routineSteps;
-	private int stepCounter;
-	private int maxStep;
+	private Routine routine;
+	private Routine.RoutineStep step;
+	private MediaPlayer player;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,66 +28,37 @@ public class RoutineActivity extends Activity {
 		initializeViewsAndComponents();
 		
 		Intent i = getIntent();
-		int routine = i.getIntExtra("routine", -1);
-		initializeRoutineSteps(routine);
-		routineStepView.setImageResource(routineSteps[stepCounter]);
-		
-		switch (routine) {
-			case MainActivity.TEETH_BRUSHING: {
-//				txtRoutine.setText("PRANJE ZUBA!");
-			}
-			break;
-			
-			case MainActivity.SHOE_TYING: {
-//				txtRoutine.setText("VEZANJE PERTLI!");
-			}
-			break;
-			
-			case MainActivity.PUTTING_ON_TSHIRT: {
-//				txtRoutine.setText("OBLACENJE MAJICE!");
-			}
-			break;
-			
-			default:
-//				txtRoutine.setText("GRESKA!");
-		}
+		int routineID = i.getIntExtra("routine", -1);
+		initializeRoutine(routineID);
+		step = routine.getFirstStep();
+		routineStepView.setImageResource(step.getImageRes());
 		
 		setButtonsListeners();
 	}
 	
 	private void initializeViewsAndComponents() {
-		stepCounter = 0;
-		maxStep = 0;
 		routineStepView = (ImageView) findViewById(R.id.imgRoutineStep);
-//		txtRoutine = (TextView) findViewById(R.id.txtRoutine);
 		btnPrevious = (Button) findViewById(R.id.btnPrevious);
 		btnNext = (Button) findViewById(R.id.btnNext);
 		btnSound = (Button) findViewById(R.id.btnSound);
 		btnFinish = (Button) findViewById(R.id.btnFinish);
 	}
 	
-	private void initializeRoutineSteps(int routineID) {
-		switch (routineID) {
-			case MainActivity.TEETH_BRUSHING: {
-				int[] routineSteps = {
-					R.drawable.eagle1,
-					R.drawable.eagle2,
-					R.drawable.eagle3
-				};
-				maxStep = 2;
-				this.routineSteps = routineSteps;
-			}
-			break;
+	public void initializeRoutine(int routineID) {
+		switch(routineID) {
 			
-			case MainActivity.SHOE_TYING: {
-				int[] routineSteps = {
-					R.drawable.tiger1,
-					R.drawable.tiger2,
-					R.drawable.tiger3
-				};
-				maxStep = 2;
-				this.routineSteps = routineSteps;
-			}
+			case MainActivity.TEETH_BRUSHING:
+				routine = new Routine("PRANJE ZUBA", "");
+				routine.addStep(routine.new RoutineStep("Korak 1.", R.drawable.eagle1, R.raw.example));
+				routine.addStep(routine.new RoutineStep("Korak 2.", R.drawable.eagle2, R.raw.example));
+				routine.addStep(routine.new RoutineStep("Korak 3.", R.drawable.eagle3, R.raw.example));
+			break;
+				
+			case MainActivity.SHOE_TYING:
+				routine = new Routine("VEZANJE PERTLI", "");
+				routine.addStep(routine.new RoutineStep("Korak 1.", R.drawable.tiger1, R.raw.example));
+				routine.addStep(routine.new RoutineStep("Korak 2.", R.drawable.tiger2, R.raw.example));
+				routine.addStep(routine.new RoutineStep("Korak 3.", R.drawable.tiger3, R.raw.example));
 			break;
 		}
 	}
@@ -100,10 +69,12 @@ public class RoutineActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(stepCounter > 0) {
-					routineStepView.setImageResource(routineSteps[--stepCounter]);
+				step = routine.getPreviousStep();
+				if(step != null) {
+					routineStepView.setImageResource(step.getImageRes());
 				} else {
-					Toast.makeText(v.getContext(), "Pocetak liste", Toast.LENGTH_SHORT).show();
+					step = routine.getCurrentStep();
+					Toast.makeText(RoutineActivity.this, "PRVI KORAK", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -112,10 +83,12 @@ public class RoutineActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(stepCounter < maxStep) {
-					routineStepView.setImageResource(routineSteps[++stepCounter]);
+				step = routine.getNextStep();
+				if(step != null) {
+					routineStepView.setImageResource(step.getImageRes());
 				} else {
-					Toast.makeText(v.getContext(), "Kraj liste", Toast.LENGTH_SHORT).show();;
+					step = routine.getCurrentStep();
+					Toast.makeText(RoutineActivity.this, "POSLEDNJI KORAK", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -124,7 +97,10 @@ public class RoutineActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+				if(step != null) {
+					player = MediaPlayer.create(RoutineActivity.this, step.getAudioRes());
+					player.start();
+				}
 			}
 		});
 		
